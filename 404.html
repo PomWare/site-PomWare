@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | POMWARE INNOVATIVE SOLUTIONS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .error-hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+        }
+
+        .error-content {
+            max-width: 600px;
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .error-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .error-message {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        .error-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .error-link-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .error-link-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .error-link-card i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .error-link-card h4 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .error-link-card a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .error-link-card a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .error-title {
+                font-size: 2rem;
+            }
+            
+            .error-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .error-links {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- 404 Hero Section -->
+    <section class="error-hero">
+        <div class="container error-content">
+            <div class="error-icon floating">
+                <i class="fas fa-cloud"></i>
+            </div>
+            <div class="error-code">404</div>
+            <h1 class="error-title">Page Not Found</h1>
+            <p class="error-message">
+                Oops! The page you're looking for seems to have drifted into the digital clouds. 
+                Don't worry - even the best navigators sometimes find unexpected routes.
+            </p>
+            
+            <div class="error-actions">
+                <a href="index.html" class="cta-button">
+                    <i class="fas fa-home"></i> Back to Home
+                </a>
+                <a href="contact.html" class="outline-button" style="background: rgba(255,255,255,0.1); color: white; border-color: white;">
+                    <i class="fas fa-envelope"></i> Contact Support
+                </a>
+            </div>
+
+            <div class="error-links">
+                <div class="error-link-card">
+                    <i class="fas fa-laptop-code"></i>
+                    <h4>Our Services</h4>
+                    <a href="web-development.html">Web Development</a><br>
+                    <a href="digital-marketing.html">Digital Marketing</a><br>
+                    <a href="cloud-solutions.html">Cloud Solutions</a>
+                </div>
+                
+                <div class="error-link-card">
+                    <i class="fas fa-info-circle"></i>
+                    <h4>Company</h4>
+                    <a href="about.html">About Us</a><br>
+                    <a href="portfolio.html">Portfolio</a><br>
+                    <a href="careers.html">Careers</a>
+                </div>
+                
+                <div class="error-link-card">
+                    <i class="fas fa-paper-plane"></i>
+                    <h4>Get in Touch</h4>
+                    <a href="contact.html">Contact Us</a><br>
+                    <a href="support.html">Support</a><br>
+                    <a href="quote.html">Get a Quote</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; opacity: 0.7;">
+                <p>Still lost? Our team is here to help you find your way.</p>
+                <a href="contact.html" style="color: white; text-decoration: underline;">Contact our support team →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Load global components
+        fetch('components/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                // Re-initialize mobile menu
+                const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+                const mainNav = document.getElementById('mainNav');
+                if (mobileMenuBtn && mainNav) {
+                    mobileMenuBtn.addEventListener('click', () => {
+                        mainNav.classList.toggle('active');
+                        mobileMenuBtn.innerHTML = mainNav.classList.contains('active') 
+                            ? '<i class="fas fa-times"></i>' 
+                            : '<i class="fas fa-bars"></i>';
+                    });
+                }
+            });
+
+        fetch('components/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            });
+
+        // Add some interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const errorCode = document.querySelector('.error-code');
+            errorCode.addEventListener('mouseover', function() {
+                this.style.transform = 'scale(1.1)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            
+            errorCode.addEventListener('mouseout', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

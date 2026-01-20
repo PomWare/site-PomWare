@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POMWARE INNOVATIVE SOLUTIONS | Custom IT Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container hero-content">
+            <h1>Transforming Ideas into <span class="gradient-text">Digital Reality</span></h1>
+            <p>POMWARE INNOVATIVE SOLUTIONS delivers cutting-edge custom IT solutions, from backend systems to IoT devices, with expertise in hardware, software, and digital marketing.</p>
+            <div class="hero-buttons">
+                <a href="#services" class="cta-button">Our Services</a>
+                <a href="contact.html" class="outline-button">Start a Project</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services section" id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Comprehensive Services</h2>
+                <p>End-to-end solutions tailored to your business needs, from concept to deployment and beyond.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card floating">
+                    <div class="service-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Software Development</h3>
+                    <p>Custom backend, frontend, and mobile applications built with the latest technologies.</p>
+                    <ul class="service-features">
+                        <li>Backend Systems</li>
+                        <li>Web Applications</li>
+                        <li>iOS & Android Apps</li>
+                        <li>API Development</li>
+                    </ul>
+                </div>
+                <div class="service-card floating" style="animation-delay: 0.5s;">
+                    <div class="service-icon">
+                        <i class="fas fa-microchip" style="color: white;"></i>
+                    </div>
+                    <h3>Hardware & IoT Solutions</h3>
+                    <p>Custom PCB design, firmware development, and IoT device implementation.</p>
+                    <ul class="service-features">
+                        <li>PCB Design & Manufacturing</li>
+                        <li>ESP32 & Nordic Solutions</li>
+                        <li>IoT Device Development</li>
+                        <li>Firmware Programming</li>
+                    </ul>
+                </div>
+                <div class="service-card floating" style="animation-delay: 1s;">
+                    <div class="service-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3>Cloud & Infrastructure</h3>
+                    <p>Scalable cloud solutions and infrastructure to support your growing business.</p>
+                    <ul class="service-features">
+                        <li>Cloud Architecture</li>
+                        <li>DevOps Implementation</li>
+                        <li>Data Management</li>
+                        <li>Security Solutions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technologies Section -->
+    <section class="technologies section" id="technologies">
+        <div class="container">
+            <div class="section-title">
+                <h2>Technology Expertise</h2>
+                <p>We work with cutting-edge technologies to deliver robust and scalable solutions.</p>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-card floating">
+                    <div class="tech-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Websites & E-shops</h3>
+                    <p>Responsive, high-performance websites and e-commerce solutions tailored to your business needs.</p>
+                </div>
+                <div class="tech-card floating" style="animation-delay: 0.2s;">
+                    <div class="tech-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Android & iOS Applications</h3>
+                    <p>Native and cross-platform mobile applications for both major platforms with seamless user experiences.</p>
+                </div>
+                <div class="tech-card floating" style="animation-delay: 0.4s;">
+                    <div class="tech-icon">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <h3>Desktop Applications</h3>
+                    <p>Powerful desktop software for Windows, macOS, and Linux with modern UI/UX design.</p>
+                </div>
+                <div class="tech-card floating" style="animation-delay: 0.6s;">
+                    <div class="tech-icon">
+                        <i class="fas fa-microchip" style="color: white;"></i>
+                    </div>
+                    <h3>Firmware Development</h3>
+                    <p>Low-level programming for embedded systems, IoT devices, and custom hardware solutions.</p>
+                </div>
+                <div class="tech-card floating" style="animation-delay: 0.8s;">
+                    <div class="tech-icon">
+                        <i class="fas fa-project-diagram" style="color: white;"></i>
+                    </div>
+                    <h3>PCB Design & Prototyping</h3>
+                    <p>Custom printed circuit board design, prototyping, and manufacturing for your electronic products.</p>
+                </div>
+                <div class="tech-card floating" style="animation-delay: 1s;">
+                    <div class="tech-icon">
+                        <i class="fas fa-bullhorn" style="color: white;"></i>
+                    </div>
+                    <h3>Digital Marketing</h3>
+                    <p>Comprehensive digital marketing strategies including SEO, social media, and content marketing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section section">
+        <div class="container">
+            <h2>Ready to Transform Your Business?</h2>
+            <p>Let's discuss how POMWARE INNOVATIVE SOLUTIONS can help bring your ideas to life with cutting-edge technology and expert implementation.</p>
+            <br>
+            <a href="contact.html" class="dark-button">Start a Project</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Load header and footer components
+        fetch('components/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                // Re-initialize mobile menu after loading header
+                const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+                const mainNav = document.getElementById('mainNav');
+                if (mobileMenuBtn && mainNav) {
+                    mobileMenuBtn.addEventListener('click', () => {
+                        mainNav.classList.toggle('active');
+                        mobileMenuBtn.innerHTML = mainNav.classList.contains('active') 
+                            ? '<i class="fas fa-times"></i>' 
+                            : '<i class="fas fa-bars"></i>';
+                    });
+                }
+            });
+
+        fetch('components/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            });
+    </script>
+</body>
+</html>
