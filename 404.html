@@ -196,45 +196,6 @@
 
     <!-- Footer -->
     <div id="footer-placeholder"></div>
-
     <script src="js/main.js"></script>
-    <script>
-        // Load global components
-        fetch('components/header.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-                // Re-initialize mobile menu
-                const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-                const mainNav = document.getElementById('mainNav');
-                if (mobileMenuBtn && mainNav) {
-                    mobileMenuBtn.addEventListener('click', () => {
-                        mainNav.classList.toggle('active');
-                        mobileMenuBtn.innerHTML = mainNav.classList.contains('active') 
-                            ? '<i class="fas fa-times"></i>' 
-                            : '<i class="fas fa-bars"></i>';
-                    });
-                }
-            });
-
-        fetch('components/footer.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
-            });
-
-        // Add some interactive elements
-        document.addEventListener('DOMContentLoaded', function() {
-            const errorCode = document.querySelector('.error-code');
-            errorCode.addEventListener('mouseover', function() {
-                this.style.transform = 'scale(1.1)';
-                this.style.transition = 'transform 0.3s ease';
-            });
-            
-            errorCode.addEventListener('mouseout', function() {
-                this.style.transform = 'scale(1)';
-            });
-        });
-    </script>
 </body>
 </html>
