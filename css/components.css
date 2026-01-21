@@ -905,9 +905,21 @@ nav ul {
     margin-left: auto; /* keeps it at the far right */
   }
 
-  /* hide CTA on small screens (optional) */
   .header-cta {
-    display: none;
+    display: inline-flex;
+    margin-left: 0;
+  }
+
+  /* make CTA appear inside the opened menu area */
+  .header-container {
+    position: relative;
+    flex-wrap: wrap;
+  }
+
+  .header-cta {
+    width: calc(100% - 10%);
+    margin: 12px 5% 6px;
+    justify-content: center;
   }
 
   /* nav becomes dropdown panel */
@@ -917,13 +929,25 @@ nav ul {
     left: 0;
     right: 0;
 
-    background: rgba(10, 14, 23, 0.98);
-    border-bottom: 1px solid rgba(0, 212, 255, 0.18);
-    backdrop-filter: blur(10px);
+    background: rgba(10, 14, 23, 0.995); /* a bit darker */
+    border-bottom: 1px solid rgba(0, 212, 255, 0.20);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.45); /* separation */
+    backdrop-filter: blur(12px);
 
     display: none;
     padding: 14px 0;
   }
+
+  @media (max-width: 900px) {
+        #mainNav.active {
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        nav ul li {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+  }
+
 
   /* show when active */
   #mainNav.active {
@@ -967,5 +991,18 @@ nav ul {
 
   .has-dropdown.open .nav-chevron {
     transform: rotate(180deg);
+  }
+}
+
+.nav-cta-item { display: none; }
+
+@media (max-width: 900px) {
+  .header-cta { display: none; }   /* hide desktop CTA on mobile */
+  .nav-cta-item { display: block; border-top: none; }
+  .nav-cta {
+    width: 90%;
+    margin: 12px auto 6px;
+    justify-content: center;
+    display: flex;
   }
 }
