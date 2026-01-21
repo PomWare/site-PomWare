@@ -14,31 +14,33 @@
     <nav id="mainNav" aria-label="Main navigation">
       <ul>
         <li><a href="index.html">Home</a></li>
-
         <li><a href="index.html#services">Services</a></li>
 
         <!-- Technologies dropdown -->
         <li class="has-dropdown">
-          <a href="index.html#technologies" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
-            Technologies <i class="fas fa-chevron-down nav-chevron" aria-hidden="true"></i>
+          <a href="#" class="dropdown-toggle" aria-expanded="false">
+            Technologies <i class="fas fa-chevron-down nav-chevron"></i>
           </a>
 
-          <div class="dropdown-menu" role="menu">
-            <a role="menuitem" href="software-development.html">Software Development</a>
-            <a role="menuitem" href="hardware-solutions.html">Hardware Solutions</a>
-            <a role="menuitem" href="iot-development.html">IoT Development</a>
-            <a role="menuitem" href="cloud-solutions.html">Cloud Solutions</a>
-            <a role="menuitem" href="digital-marketing.html">Digital Marketing</a>
+          <div class="dropdown-menu" role="menu" aria-label="Technologies menu">
+            <a href="software-development.html" role="menuitem">Software Development</a>
+            <a href="hardware-solutions.html" role="menuitem">Hardware Solutions</a>
+            <a href="iot-development.html" role="menuitem">IoT Development</a>
+            <a href="cloud-solutions.html" role="menuitem">Cloud Solutions</a>
+            <a href="digital-marketing.html" role="menuitem">Digital Marketing</a>
           </div>
         </li>
 
-        <li class="nav-cta-item">
-            <a href="contact.html" class="cta-button nav-cta">Get in Touch</a>
-        </li>
+        <li><a href="contact.html">Contact</a></li>
 
+        <!-- Mobile-only CTA inside menu -->
+        <li class="nav-cta-item">
+          <a href="contact.html" class="cta-button nav-cta">Get in Touch</a>
+        </li>
       </ul>
     </nav>
 
+    <!-- Desktop CTA -->
     <a href="contact.html" class="cta-button header-cta">Get in Touch</a>
   </div>
 </header>

@@ -27,14 +27,8 @@ function syncConsentFromStorage() {
 function ensureCookieBanner() {
   const saved = localStorage.getItem(CONSENT_KEY);
 
-  if (saved === "accepted") {
-    updateConsent(true);
-    return;
-  }
-  if (saved === "rejected") {
-    updateConsent(false);
-    return;
-  }
+  if (saved === "accepted") return updateConsent(true);
+  if (saved === "rejected") return updateConsent(false);
 
   if (document.getElementById("cookie-banner")) return;
 
@@ -95,10 +89,14 @@ async function loadComponent(url, placeholderId) {
 
   try {
     const res = await fetch(url, { cache: "no-cache" });
-    if (!res.ok) return false;
+    if (!res.ok) {
+      console.warn(`Failed to load ${url}: ${res.status}`);
+      return false;
+    }
     el.innerHTML = await res.text();
     return true;
-  } catch {
+  } catch (err) {
+    console.warn(`Error loading ${url}`, err);
     return false;
   }
 }
@@ -117,43 +115,44 @@ function initMobileMenu() {
   mobileMenuBtn.addEventListener("click", () => {
     const open = mainNav.classList.toggle("active");
     mobileMenuBtn.setAttribute("aria-expanded", open ? "true" : "false");
-    mobileMenuBtn.innerHTML = open
-      ? '<i class="fas fa-times"></i>'
-      : '<i class="fas fa-bars"></i>';
+    mobileMenuBtn.innerHTML = open ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
   });
 
-  // Close menu ONLY when clicking real links (not the dropdown toggle)
-  document.querySelectorAll("nav a:not(.dropdown-toggle)").forEach((link) => {
-    link.addEventListener("click", () => {
-      mainNav.classList.remove("active");
-      mobileMenuBtn.setAttribute("aria-expanded", "false");
-      mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-    });
+  // Close menu only when clicking normal links (NOT dropdown toggle)
+  mainNav.addEventListener("click", (e) => {
+    const a = e.target.closest("a");
+    if (!a) return;
+
+    // If it's the Technologies toggle, don't close
+    if (a.classList.contains("dropdown-toggle")) return;
+
+    // If it's inside dropdown, close after navigation
+    mainNav.classList.remove("active");
+    mobileMenuBtn.setAttribute("aria-expanded", "false");
+    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
   });
 }
 
 // =======================
-// Technologies dropdown: tap-to-open on mobile
+// Technologies dropdown (mobile click)
 // =======================
 function initTechDropdownMobile() {
   const dropdown = document.querySelector(".has-dropdown");
   const toggle = document.querySelector(".has-dropdown .dropdown-toggle");
   if (!dropdown || !toggle) return;
 
+  const isMobile = () => window.matchMedia("(max-width: 900px)").matches;
+
+  // Avoid double binding
   if (toggle.dataset.bound === "true") return;
   toggle.dataset.bound = "true";
 
-  const isMobile = () => window.matchMedia("(max-width: 900px)").matches;
-
   toggle.addEventListener("click", (e) => {
-    if (!isMobile()) return; // desktop uses hover via CSS
+    if (!isMobile()) return; // desktop uses hover
     e.preventDefault();
 
     dropdown.classList.toggle("open");
-    toggle.setAttribute(
-      "aria-expanded",
-      dropdown.classList.contains("open") ? "true" : "false"
-    );
+    toggle.setAttribute("aria-expanded", dropdown.classList.contains("open") ? "true" : "false");
   });
 
   window.addEventListener("resize", () => {
@@ -183,7 +182,7 @@ function initSmoothScrolling() {
 }
 
 // =======================
-// Contact form handling
+// Contact form
 // =======================
 function initContactForm() {
   const contactForm = document.getElementById("contactForm");
@@ -192,7 +191,7 @@ function initContactForm() {
   if (contactForm.dataset.bound === "true") return;
   contactForm.dataset.bound = "true";
 
-  contactForm.addEventListener("submit", function (e) {
+  contactForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const formData = new FormData(contactForm);
@@ -202,10 +201,7 @@ function initContactForm() {
     alert("Thank you for your message! We will get back to you soon.");
     contactForm.reset();
 
-    if (
-      localStorage.getItem(CONSENT_KEY) === "accepted" &&
-      typeof window.gtag === "function"
-    ) {
+    if (localStorage.getItem(CONSENT_KEY) === "accepted" && typeof window.gtag === "function") {
       window.gtag("event", "contact_form_submit", { page_path: location.pathname });
     }
   });
@@ -219,11 +215,15 @@ function setActiveNav() {
   document.querySelectorAll("nav a").forEach((a) => a.classList.remove("active"));
 
   const exact = document.querySelector(`nav a[href="${current}"]`);
-  if (exact) exact.classList.add("active");
+  if (exact) return exact.classList.add("active");
+
+  if (current === "" || current === "index.html") {
+    document.querySelector(`nav a[href="index.html"]`)?.classList.add("active");
+  }
 }
 
 // =======================
-// Boot (ONLY ONE)
+// Boot (ONLY ONCE)
 // =======================
 document.addEventListener("DOMContentLoaded", async () => {
   redirectTo404IfLikelyNotFound();
