@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Careers | POMWARE INNOVATIVE SOLUTIONS</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/components.css">
 </head>
@@ -85,11 +86,11 @@
                     <i class="fab fa-linkedin fa-3x" style="margin-bottom: 20px;"></i>
                     <h3>Follow Us on LinkedIn</h3>
                     <p>We announce all new job openings on our LinkedIn page first. Follow us to stay updated on career opportunities and company news.</p>
-                    <a href="https://linkedin.com/company/pomware" class="cta-button" style="background: white; color: #0077B5; margin-top: 20px; display: inline-block;" target="_blank">
+                    <a href="https://linkedin.com/company/pomware" class="cta-button" style="background: white; color: #0077B5; margin-top: 20px; display: inline-block;" target="_blank" rel="noopener">
                         <i class="fab fa-linkedin"></i> Follow POMWARE
                     </a>
                 </div>
-                
+
                 <div class="contact-alternative" style="margin-top: 30px;">
                     <h4>Have an exceptional portfolio?</h4>
                     <p>Even without current openings, we're always interested in connecting with exceptional talent. Feel free to send your resume for future consideration.</p>
@@ -145,30 +146,5 @@
     <div id="footer-placeholder"></div>
 
     <script src="js/main.js"></script>
-    <script>
-        // Load global components
-        fetch('components/header.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-                // Re-initialize mobile menu
-                const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-                const mainNav = document.getElementById('mainNav');
-                if (mobileMenuBtn && mainNav) {
-                    mobileMenuBtn.addEventListener('click', () => {
-                        mainNav.classList.toggle('active');
-                        mobileMenuBtn.innerHTML = mainNav.classList.contains('active') 
-                            ? '<i class="fas fa-times"></i>' 
-                            : '<i class="fas fa-bars"></i>';
-                    });
-                }
-            });
-
-        fetch('components/footer.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
-            });
-    </script>
 </body>
 </html>

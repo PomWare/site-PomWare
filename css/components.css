@@ -741,3 +741,8 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+.footer-bottom {
+    text-align: center;
+    opacity: 0.85;
+}
