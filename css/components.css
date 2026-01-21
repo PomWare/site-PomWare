@@ -586,20 +586,6 @@ nav a:hover::after {
     color: var(--accent-light);
 }
 
-/* Hardware-specific icon colors */
-.fa-microchip { color: #00d4ff; }
-.fa-project-diagram { color: #00d4ff; }
-.fa-wifi { color: #00d4ff; }
-.fa-satellite-dish { color: #00d4ff; }
-.fa-bolt { color: #FFD700; }
-.fa-eye { color: #32CD32; }
-.fa-tools { color: #FF6347; }
-.fa-print { color: #00d4ff; }
-.fa-industry { color: #00d4ff; }
-.fa-cube { color: #00d4ff; }
-.fa-robot { color: #00d4ff; }
-.fa-certificate { color: #FFD700; }
-
 /* Digital Marketing Specific Styles */
 .project-result {
     background: rgba(0, 212, 255, 0.1);
@@ -611,30 +597,6 @@ nav a:hover::after {
     color: var(--accent-light);
     text-align: center;
 }
-
-/* Improved Digital Marketing icon colors and sizes */
-.fa-search-location { color: #4285F4; }
-.fa-users { color: #E4405F; }
-.fa-ad { color: #FF6B6B; }
-.fa-mail-bulk { color: #EA4335; }
-.fa-analytics { color: #34A853; }
-.fa-cart-arrow-down { color: #FBBC05; }
-.fa-chart-pie { color: #4285F4; }
-.fa-chess-knight { color: #34A853; }
-.fa-play-circle { color: #EA4335; }
-.fa-tachometer-alt { color: #FBBC05; }
-.fa-database { color: #4285F4; }
-.fa-cogs { color: #34A853; }
-.fa-chart-bar { color: #EA4335; }
-.fa-handshake { color: #FBBC05; }
-
-/* Platform icons with better visibility */
-.fa-google { color: #4285F4; }
-.fa-facebook-f { color: #1877F2; }
-.fa-envelope-open-text { color: #EA4335; }
-.fa-search-dollar { color: #34A853; }
-.fa-store-alt { color: #FF6B6B; }
-.fa-paint-brush { color: #FBBC05; }
 
 /* Ensure platform icons are properly sized */
 .tech-icon .fa-2x {
