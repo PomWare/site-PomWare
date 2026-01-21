@@ -722,3 +722,13 @@ footer {
 .footer-brand:hover {
     color: var(--accent);
 }
+
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+}
+
+.logo-link:visited {
+    color: inherit;
+}
