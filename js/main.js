@@ -1,3 +1,107 @@
+// =======================
+// CONFIG
+// =======================
+const GA_MEASUREMENT_ID = "G-05XWMXZNT"; // <-- your GA4 ID
+const CONSENT_KEY = "pomware_cookie_consent_v1"; // localStorage key
+
+// =======================
+// Google Analytics + Consent Mode
+// =======================
+function injectGoogleTagOnce() {
+  if (!GA_MEASUREMENT_ID) return;
+
+  // Prevent double-injection
+  if (document.getElementById("ga-gtag-loader")) return;
+
+  // 1) gtag loader
+  const s1 = document.createElement("script");
+  s1.id = "ga-gtag-loader";
+  s1.async = true;
+  s1.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA_MEASUREMENT_ID)}`;
+  document.head.appendChild(s1);
+
+  // 2) gtag init
+  const s2 = document.createElement("script");
+  s2.id = "ga-gtag-init";
+  s2.text = `
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+
+    // Default consent (EEA/GDPR-friendly)
+    gtag('consent', 'default', {
+      'analytics_storage': 'denied',
+      'ad_storage': 'denied'
+    });
+
+    gtag('js', new Date());
+    gtag('config', '${GA_MEASUREMENT_ID}', {
+      // optional: reduce data until consent
+      'anonymize_ip': true
+    });
+  `;
+  document.head.appendChild(s2);
+}
+
+function updateConsent(granted) {
+  if (typeof window.gtag !== "function") return;
+
+  window.gtag("consent", "update", {
+    analytics_storage: granted ? "granted" : "denied",
+    ad_storage: "denied" // keep ads denied unless you actually run ads
+  });
+}
+
+// =======================
+// Cookie Banner
+// =======================
+function ensureCookieBanner() {
+  // Already decided?
+  const saved = localStorage.getItem(CONSENT_KEY);
+  if (saved === "accepted") {
+    updateConsent(true);
+    return;
+  }
+  if (saved === "rejected") {
+    updateConsent(false);
+    return;
+  }
+
+  // Prevent duplicates
+  if (document.getElementById("cookie-banner")) return;
+
+  const banner = document.createElement("div");
+  banner.id = "cookie-banner";
+  banner.className = "cookie-banner";
+  banner.innerHTML = `
+    <div class="cookie-banner__content">
+      <div class="cookie-banner__text">
+        <strong>Cookies</strong>
+        <span>
+          We use cookies to understand traffic and improve the website. You can accept or reject analytics cookies.
+        </span>
+      </div>
+      <div class="cookie-banner__actions">
+        <button class="outline-button cookie-btn" id="cookie-reject" type="button">Reject</button>
+        <button class="cta-button cookie-btn" id="cookie-accept" type="button">Accept</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(banner);
+
+  document.getElementById("cookie-accept")?.addEventListener("click", () => {
+    localStorage.setItem(CONSENT_KEY, "accepted");
+    updateConsent(true);
+    banner.remove();
+  });
+
+  document.getElementById("cookie-reject")?.addEventListener("click", () => {
+    localStorage.setItem(CONSENT_KEY, "rejected");
+    updateConsent(false);
+    banner.remove();
+  });
+}
+
 // ---------- Component loader ----------
 async function loadComponent(url, placeholderId) {
     const el = document.getElementById(placeholderId);

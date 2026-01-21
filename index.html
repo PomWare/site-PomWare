@@ -3,7 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POMWARE INNOVATIVE SOLUTIONS | Custom IT Solutions</title>
+    
+    <title>Pomware | Custom Software, IoT & Hardware Solutions in Cyprus</title>
+    <meta name="description" content="Pomware Innovative Solutions is a Cyprus-based company offering custom software development, IoT & hardware solutions, cloud infrastructure, and digital marketing for businesses.">
+    <link rel="canonical" href="https://pomwareltd.com/">
+    <meta name="robots" content="index,follow">
+    <!-- Open Graph (for Facebook/LinkedIn) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Pomware | Custom Software, IoT & Hardware Solutions in Cyprus">
+    <meta property="og:description" content="Custom software development, IoT & hardware solutions, cloud infrastructure and digital marketing in Cyprus.">
+    <meta property="og:url" content="https://pomwareltd.com/">
+    <meta property="og:site_name" content="Pomware">
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pomware | Custom Software, IoT & Hardware Solutions in Cyprus">
+    <meta name="twitter:description" content="Custom software development, IoT & hardware solutions, cloud infrastructure and digital marketing in Cyprus.">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/components.css">
@@ -141,32 +156,6 @@
 
     <!-- Footer -->
     <div id="footer-placeholder"></div>
-
     <script src="js/main.js"></script>
-    <script>
-        // Load header and footer components
-        fetch('components/header.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-                // Re-initialize mobile menu after loading header
-                const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-                const mainNav = document.getElementById('mainNav');
-                if (mobileMenuBtn && mainNav) {
-                    mobileMenuBtn.addEventListener('click', () => {
-                        mainNav.classList.toggle('active');
-                        mobileMenuBtn.innerHTML = mainNav.classList.contains('active') 
-                            ? '<i class="fas fa-times"></i>' 
-                            : '<i class="fas fa-bars"></i>';
-                    });
-                }
-            });
-
-        fetch('components/footer.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
-            });
-    </script>
 </body>
 </html>
