@@ -709,6 +709,16 @@ footer {
     opacity: 0.85;
 }
 
+.footer-brand {
+    color: var(--text);     
+    text-decoration: none;    
+    font: inherit;           
+}
+
+.footer-brand:visited {
+    color: var(--text);     
+}
+
 .footer-brand:hover {
     color: var(--accent);
 }
