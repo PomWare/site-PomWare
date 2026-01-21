@@ -619,3 +619,20 @@ footer {
 }
 
 .has-dropdown{ padding-bottom: 18px; }
+
+nav ul > li > a{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;          
+  line-height: 1;    
+  padding: 6px 0;    
+}
+
+.dropdown-toggle{ display: inline-flex; align-items:center; gap:8px; }
+
+.nav-chevron{
+  line-height: 1;
+  display: inline-block;
+  transform-origin: center;
+  transform: translateY(1px); 
+}
