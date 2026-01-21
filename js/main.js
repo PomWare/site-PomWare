@@ -1,62 +1,33 @@
 // =======================
 // CONFIG
 // =======================
-const GA_MEASUREMENT_ID = "G-05XWMXZNT"; // <-- your GA4 ID
-const CONSENT_KEY = "pomware_cookie_consent_v1"; // localStorage key
+const CONSENT_KEY = "pomware_cookie_consent_v1";
 
 // =======================
-// Google Analytics + Consent Mode
+// GA Consent helpers (GA tag must be in <head> of each page)
 // =======================
-function injectGoogleTagOnce() {
-  if (!GA_MEASUREMENT_ID) return;
-
-  // Prevent double-injection
-  if (document.getElementById("ga-gtag-loader")) return;
-
-  // 1) gtag loader
-  const s1 = document.createElement("script");
-  s1.id = "ga-gtag-loader";
-  s1.async = true;
-  s1.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA_MEASUREMENT_ID)}`;
-  document.head.appendChild(s1);
-
-  // 2) gtag init
-  const s2 = document.createElement("script");
-  s2.id = "ga-gtag-init";
-  s2.text = `
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-
-    // Default consent (EEA/GDPR-friendly)
-    gtag('consent', 'default', {
-      'analytics_storage': 'denied',
-      'ad_storage': 'denied'
-    });
-
-    gtag('js', new Date());
-    gtag('config', '${GA_MEASUREMENT_ID}', {
-      // optional: reduce data until consent
-      'anonymize_ip': true
-    });
-  `;
-  document.head.appendChild(s2);
-}
-
 function updateConsent(granted) {
   if (typeof window.gtag !== "function") return;
 
   window.gtag("consent", "update", {
     analytics_storage: granted ? "granted" : "denied",
-    ad_storage: "denied" // keep ads denied unless you actually run ads
+    ad_storage: "denied"
   });
+}
+
+function syncConsentFromStorage() {
+  const saved = localStorage.getItem(CONSENT_KEY);
+  if (saved === "accepted") updateConsent(true);
+  if (saved === "rejected") updateConsent(false);
 }
 
 // =======================
 // Cookie Banner
 // =======================
 function ensureCookieBanner() {
-  // Already decided?
   const saved = localStorage.getItem(CONSENT_KEY);
+
+  // If user already decided, just apply consent and exit
   if (saved === "accepted") {
     updateConsent(true);
     return;
@@ -77,7 +48,8 @@ function ensureCookieBanner() {
       <div class="cookie-banner__text">
         <strong>Cookies</strong>
         <span>
-          We use cookies to understand traffic and improve the website. You can accept or reject analytics cookies.
+          We use analytics cookies to understand traffic and improve the website.
+          You can accept or reject analytics cookies.
         </span>
       </div>
       <div class="cookie-banner__actions">
@@ -102,129 +74,166 @@ function ensureCookieBanner() {
   });
 }
 
-// ---------- Component loader ----------
+// =======================
+// 404 redirect helper (static hosting)
+// =======================
+// If a user lands on a "pretty URL" folder like /services (no .html),
+// redirect them to /404.html and pass the attempted path.
+function redirectTo404IfLikelyNotFound() {
+  const path = window.location.pathname || "/";
+  const file = path.split("/").pop() || "";
+
+  // If it already looks like a file (/something.html, /file.css, etc.), do nothing
+  if (file.includes(".")) return;
+
+  // If root, do nothing
+  if (path === "/" || path === "/index.html") return;
+
+  // If we're already on 404, do nothing
+  if (path.endsWith("/404.html")) return;
+
+  // Redirect
+  const target = `/404.html?path=${encodeURIComponent(path)}`;
+  window.location.replace(target);
+}
+
+// =======================
+// Component loader
+// =======================
 async function loadComponent(url, placeholderId) {
-    const el = document.getElementById(placeholderId);
-    if (!el) return false;
+  const el = document.getElementById(placeholderId);
+  if (!el) return false;
 
-    try {
-        const res = await fetch(url, { cache: "no-cache" });
-        if (!res.ok) {
-            console.warn(`Failed to load ${url}: ${res.status}`);
-            return false;
-        }
-        el.innerHTML = await res.text();
-        return true;
-    } catch (err) {
-        console.warn(`Error loading ${url}`, err);
-        return false;
+  try {
+    const res = await fetch(url, { cache: "no-cache" });
+    if (!res.ok) {
+      console.warn(`Failed to load ${url}: ${res.status}`);
+      return false;
     }
+    el.innerHTML = await res.text();
+    return true;
+  } catch (err) {
+    console.warn(`Error loading ${url}`, err);
+    return false;
+  }
 }
 
-// ---------- Mobile menu toggle ----------
+// =======================
+// Mobile menu toggle
+// =======================
 function initMobileMenu() {
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mainNav = document.getElementById('mainNav');
+  const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+  const mainNav = document.getElementById("mainNav");
 
-    if (mobileMenuBtn && mainNav) {
-        // Avoid double-binding if init is called multiple times
-        if (mobileMenuBtn.dataset.bound === "true") return;
-        mobileMenuBtn.dataset.bound = "true";
+  if (!mobileMenuBtn || !mainNav) return;
 
-        mobileMenuBtn.addEventListener('click', () => {
-            mainNav.classList.toggle('active');
-            mobileMenuBtn.innerHTML = mainNav.classList.contains('active')
-                ? '<i class="fas fa-times"></i>'
-                : '<i class="fas fa-bars"></i>';
-        });
+  // Avoid double-binding
+  if (mobileMenuBtn.dataset.bound === "true") return;
+  mobileMenuBtn.dataset.bound = "true";
 
-        // Close mobile menu when clicking on a link
-        const navLinks = document.querySelectorAll('nav a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                mainNav.classList.remove('active');
-                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-            });
-        });
-    }
-}
+  mobileMenuBtn.addEventListener("click", () => {
+    mainNav.classList.toggle("active");
+    mobileMenuBtn.innerHTML = mainNav.classList.contains("active")
+      ? '<i class="fas fa-times"></i>'
+      : '<i class="fas fa-bars"></i>';
+  });
 
-// ---------- Smooth scrolling for same-page anchor links only ----------
-function initSmoothScrolling() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
-            if (!href || href === "#") return;
-
-            const target = document.querySelector(href);
-            // Only prevent default if the target exists on this page
-            if (target) {
-                e.preventDefault();
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
+  // Close mobile menu when clicking on a link
+  document.querySelectorAll("nav a").forEach((link) => {
+    link.addEventListener("click", () => {
+      mainNav.classList.remove("active");
+      mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
     });
+  });
 }
 
-// ---------- Contact form handling ----------
+// =======================
+// Smooth scrolling (same-page anchors only)
+// =======================
+function initSmoothScrolling() {
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      const href = this.getAttribute("href");
+      if (!href || href === "#") return;
+
+      const target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  });
+}
+
+// =======================
+// Contact form handling
+// =======================
 function initContactForm() {
-    const contactForm = document.getElementById('contactForm');
+  const contactForm = document.getElementById("contactForm");
+  if (!contactForm) return;
 
-    if (contactForm) {
-        // Avoid double-binding
-        if (contactForm.dataset.bound === "true") return;
-        contactForm.dataset.bound = "true";
+  // Avoid double-binding
+  if (contactForm.dataset.bound === "true") return;
+  contactForm.dataset.bound = "true";
 
-        contactForm.addEventListener('submit', function (e) {
-            e.preventDefault();
+  contactForm.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-            // Get form data
-            const formData = new FormData(contactForm);
-            const data = Object.fromEntries(formData);
+    const formData = new FormData(contactForm);
+    const data = Object.fromEntries(formData);
 
-            // Here you would typically send the data to a server
-            console.log('Form submitted:', data);
+    console.log("Form submitted:", data);
+    alert("Thank you for your message! We will get back to you soon.");
+    contactForm.reset();
 
-            // Show success message
-            alert('Thank you for your message! We will get back to you soon.');
-            contactForm.reset();
-        });
+    // Optional GA event (only if consent accepted)
+    if (localStorage.getItem(CONSENT_KEY) === "accepted" && typeof window.gtag === "function") {
+      window.gtag("event", "contact_form_submit", { page_path: location.pathname });
     }
+  });
 }
 
-// ---------- Nav active state (optional but nice) ----------
+// =======================
+// Nav active state
+// =======================
 function setActiveNav() {
-    // Example: careers.html -> mark nav link with href="careers.html" as active (if exists)
-    const current = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  const current = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
+  document.querySelectorAll("nav a").forEach((a) => a.classList.remove("active"));
 
-    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  const exact = document.querySelector(`nav a[href="${current}"]`);
+  if (exact) {
+    exact.classList.add("active");
+    return;
+  }
 
-    // Try exact match first
-    const exact = document.querySelector(`nav a[href="${current}"]`);
-    if (exact) {
-        exact.classList.add('active');
-        return;
-    }
-
-    // Fallback: if you're on index.html and URL has hash, highlight "Home" if present
-    if (current === 'index.html') {
-        const home = document.querySelector(`nav a[href="index.html"]`);
-        if (home) home.classList.add('active');
-    }
+  // For root
+  if (current === "" || current === "index.html") {
+    const home = document.querySelector(`nav a[href="index.html"]`);
+    if (home) home.classList.add("active");
+  }
 }
 
-// ---------- Boot ----------
-document.addEventListener('DOMContentLoaded', async function () {
-    // Load header first so nav elements exist before binding events
-    await loadComponent('components/header.html', 'header-placeholder');
-    initMobileMenu();
-    initSmoothScrolling();
-    initContactForm();
-    setActiveNav();
+// =======================
+// Boot
+// =======================
+document.addEventListener("DOMContentLoaded", async () => {
+  // If user hit a "folder URL" that doesn't exist on static hosting, push to 404
+  redirectTo404IfLikelyNotFound();
 
-    // Footer can load after
-    await loadComponent('components/footer.html', 'footer-placeholder');
+  // Apply stored consent (if user already decided previously)
+  syncConsentFromStorage();
+
+  // Load header first so nav exists before bindings
+  await loadComponent("components/header.html", "header-placeholder");
+
+  initMobileMenu();
+  initSmoothScrolling();
+  initContactForm();
+  setActiveNav();
+
+  // Load footer after
+  await loadComponent("components/footer.html", "footer-placeholder");
+
+  // Show cookie banner if needed
+  ensureCookieBanner();
 });

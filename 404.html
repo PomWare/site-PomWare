@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-05XWMXZNT"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+
+        // default deny (GDPR)
+        gtag('consent', 'default', {'analytics_storage':'denied','ad_storage':'denied'});
+
+        gtag('js', new Date());
+        gtag('config', 'G-05XWMXZNT');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Not Found | POMWARE INNOVATIVE SOLUTIONS</title>
@@ -197,5 +208,14 @@
     <!-- Footer -->
     <div id="footer-placeholder"></div>
     <script src="js/main.js"></script>
+    <script>
+        const params = new URLSearchParams(location.search);
+        const p = params.get('path');
+        if (p) {
+            const el = document.getElementById('missing-path');
+            if (el) el.textContent = p;
+        }
+    </script>
+
 </body>
 </html>
