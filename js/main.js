@@ -131,12 +131,19 @@ function initMobileMenu() {
   if (mobileMenuBtn.dataset.bound === "true") return;
   mobileMenuBtn.dataset.bound = "true";
 
-  mobileMenuBtn.addEventListener("click", () => {
-    mainNav.classList.toggle("active");
-    mobileMenuBtn.innerHTML = mainNav.classList.contains("active")
-      ? '<i class="fas fa-times"></i>'
-      : '<i class="fas fa-bars"></i>';
-  });
+//   mobileMenuBtn.addEventListener("click", () => {
+//     mainNav.classList.toggle("active");
+//     mobileMenuBtn.innerHTML = mainNav.classList.contains("active")
+//       ? '<i class="fas fa-times"></i>'
+//       : '<i class="fas fa-bars"></i>';
+//   });
+
+    mobileMenuBtn.addEventListener('click', () => {
+        const open = mainNav.classList.toggle('active');
+        mobileMenuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+        mobileMenuBtn.innerHTML = open ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+    });
+
 
   // Close mobile menu when clicking on a link
   document.querySelectorAll("nav a").forEach((link) => {
@@ -237,3 +244,43 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Show cookie banner if needed
   ensureCookieBanner();
 });
+
+function initTechDropdownMobile() {
+  const dropdown = document.querySelector(".has-dropdown");
+  const toggle = document.querySelector(".has-dropdown .dropdown-toggle");
+  if (!dropdown || !toggle) return;
+
+  // Mobile only: tap to open/close
+  const isMobile = () => window.matchMedia("(max-width: 900px)").matches;
+
+  toggle.addEventListener("click", (e) => {
+    if (!isMobile()) return; // desktop uses hover
+    e.preventDefault();
+    dropdown.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", dropdown.classList.contains("open") ? "true" : "false");
+  });
+
+  // Close dropdown when resizing to desktop
+  window.addEventListener("resize", () => {
+    if (!isMobile()) {
+      dropdown.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', async function () {
+  // Load header first so nav exists
+  await loadComponent('components/header.html', 'header-placeholder');
+
+  initMobileMenu();
+  initTechDropdownMobile();
+  initSmoothScrolling();
+  initContactForm();
+  setActiveNav();
+
+  // Load footer after
+  await loadComponent('components/footer.html', 'footer-placeholder');
+});
+
+
