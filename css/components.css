@@ -158,7 +158,7 @@ nav a:hover::after { width: 100%; }
   .has-dropdown:hover .nav-chevron{ transform: rotate(180deg); }
 
   /* keep dropdown open while moving mouse downward */
-  .has-dropdown{ padding-bottom: 18px; }
+  .has-dropdown{ padding-bottom: 0; }
   .has-dropdown::after{
     content:"";
     position:absolute;
@@ -617,3 +617,5 @@ footer {
     width: 100%;
   }
 }
+
+.has-dropdown{ padding-bottom: 18px; }
