@@ -746,3 +746,12 @@ footer {
     text-align: center;
     opacity: 0.85;
 }
+
+.footer-brand {
+    color: inherit;
+    text-decoration: none;
+}
+
+.footer-brand:hover {
+    color: var(--accent);
+}
