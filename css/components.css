@@ -867,11 +867,23 @@ nav ul {
 
 /* Hover opens dropdown (desktop) */
 @media (min-width: 901px) {
-  .has-dropdown:hover .dropdown-menu {
-    display: block;
+  .has-dropdown {
+    padding-bottom: 16px; /* creates hover area under the item */
   }
-  .has-dropdown:hover .nav-chevron {
-    transform: rotate(180deg);
+
+  .dropdown-menu {
+    top: 100%;            /* remove gap */
+    margin-top: 10px;     /* visual spacing but still within hover area */
+  }
+
+  /* Invisible bridge between link and dropdown */
+  .has-dropdown::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 18px;
   }
 }
 

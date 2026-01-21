@@ -11,7 +11,7 @@ function updateConsent(granted) {
 
   window.gtag("consent", "update", {
     analytics_storage: granted ? "granted" : "denied",
-    ad_storage: "denied"
+    ad_storage: "denied",
   });
 }
 
@@ -27,7 +27,6 @@ function syncConsentFromStorage() {
 function ensureCookieBanner() {
   const saved = localStorage.getItem(CONSENT_KEY);
 
-  // If user already decided, just apply consent and exit
   if (saved === "accepted") {
     updateConsent(true);
     return;
@@ -37,7 +36,6 @@ function ensureCookieBanner() {
     return;
   }
 
-  // Prevent duplicates
   if (document.getElementById("cookie-banner")) return;
 
   const banner = document.createElement("div");
@@ -77,24 +75,15 @@ function ensureCookieBanner() {
 // =======================
 // 404 redirect helper (static hosting)
 // =======================
-// If a user lands on a "pretty URL" folder like /services (no .html),
-// redirect them to /404.html and pass the attempted path.
 function redirectTo404IfLikelyNotFound() {
   const path = window.location.pathname || "/";
   const file = path.split("/").pop() || "";
 
-  // If it already looks like a file (/something.html, /file.css, etc.), do nothing
   if (file.includes(".")) return;
-
-  // If root, do nothing
   if (path === "/" || path === "/index.html") return;
-
-  // If we're already on 404, do nothing
   if (path.endsWith("/404.html")) return;
 
-  // Redirect
-  const target = `/404.html?path=${encodeURIComponent(path)}`;
-  window.location.replace(target);
+  window.location.replace(`/404.html?path=${encodeURIComponent(path)}`);
 }
 
 // =======================
@@ -106,14 +95,10 @@ async function loadComponent(url, placeholderId) {
 
   try {
     const res = await fetch(url, { cache: "no-cache" });
-    if (!res.ok) {
-      console.warn(`Failed to load ${url}: ${res.status}`);
-      return false;
-    }
+    if (!res.ok) return false;
     el.innerHTML = await res.text();
     return true;
-  } catch (err) {
-    console.warn(`Error loading ${url}`, err);
+  } catch {
     return false;
   }
 }
@@ -124,33 +109,58 @@ async function loadComponent(url, placeholderId) {
 function initMobileMenu() {
   const mobileMenuBtn = document.getElementById("mobileMenuBtn");
   const mainNav = document.getElementById("mainNav");
-
   if (!mobileMenuBtn || !mainNav) return;
 
-  // Avoid double-binding
   if (mobileMenuBtn.dataset.bound === "true") return;
   mobileMenuBtn.dataset.bound = "true";
 
-//   mobileMenuBtn.addEventListener("click", () => {
-//     mainNav.classList.toggle("active");
-//     mobileMenuBtn.innerHTML = mainNav.classList.contains("active")
-//       ? '<i class="fas fa-times"></i>'
-//       : '<i class="fas fa-bars"></i>';
-//   });
+  mobileMenuBtn.addEventListener("click", () => {
+    const open = mainNav.classList.toggle("active");
+    mobileMenuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    mobileMenuBtn.innerHTML = open
+      ? '<i class="fas fa-times"></i>'
+      : '<i class="fas fa-bars"></i>';
+  });
 
-    mobileMenuBtn.addEventListener('click', () => {
-        const open = mainNav.classList.toggle('active');
-        mobileMenuBtn.setAttribute("aria-expanded", open ? "true" : "false");
-        mobileMenuBtn.innerHTML = open ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-    });
-
-
-  // Close mobile menu when clicking on a link
-  document.querySelectorAll("nav a").forEach((link) => {
+  // Close menu ONLY when clicking real links (not the dropdown toggle)
+  document.querySelectorAll("nav a:not(.dropdown-toggle)").forEach((link) => {
     link.addEventListener("click", () => {
       mainNav.classList.remove("active");
+      mobileMenuBtn.setAttribute("aria-expanded", "false");
       mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
     });
+  });
+}
+
+// =======================
+// Technologies dropdown: tap-to-open on mobile
+// =======================
+function initTechDropdownMobile() {
+  const dropdown = document.querySelector(".has-dropdown");
+  const toggle = document.querySelector(".has-dropdown .dropdown-toggle");
+  if (!dropdown || !toggle) return;
+
+  if (toggle.dataset.bound === "true") return;
+  toggle.dataset.bound = "true";
+
+  const isMobile = () => window.matchMedia("(max-width: 900px)").matches;
+
+  toggle.addEventListener("click", (e) => {
+    if (!isMobile()) return; // desktop uses hover via CSS
+    e.preventDefault();
+
+    dropdown.classList.toggle("open");
+    toggle.setAttribute(
+      "aria-expanded",
+      dropdown.classList.contains("open") ? "true" : "false"
+    );
+  });
+
+  window.addEventListener("resize", () => {
+    if (!isMobile()) {
+      dropdown.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+    }
   });
 }
 
@@ -179,7 +189,6 @@ function initContactForm() {
   const contactForm = document.getElementById("contactForm");
   if (!contactForm) return;
 
-  // Avoid double-binding
   if (contactForm.dataset.bound === "true") return;
   contactForm.dataset.bound = "true";
 
@@ -193,8 +202,10 @@ function initContactForm() {
     alert("Thank you for your message! We will get back to you soon.");
     contactForm.reset();
 
-    // Optional GA event (only if consent accepted)
-    if (localStorage.getItem(CONSENT_KEY) === "accepted" && typeof window.gtag === "function") {
+    if (
+      localStorage.getItem(CONSENT_KEY) === "accepted" &&
+      typeof window.gtag === "function"
+    ) {
       window.gtag("event", "contact_form_submit", { page_path: location.pathname });
     }
   });
@@ -208,70 +219,17 @@ function setActiveNav() {
   document.querySelectorAll("nav a").forEach((a) => a.classList.remove("active"));
 
   const exact = document.querySelector(`nav a[href="${current}"]`);
-  if (exact) {
-    exact.classList.add("active");
-    return;
-  }
-
-  // For root
-  if (current === "" || current === "index.html") {
-    const home = document.querySelector(`nav a[href="index.html"]`);
-    if (home) home.classList.add("active");
-  }
+  if (exact) exact.classList.add("active");
 }
 
 // =======================
-// Boot
+// Boot (ONLY ONE)
 // =======================
 document.addEventListener("DOMContentLoaded", async () => {
-  // If user hit a "folder URL" that doesn't exist on static hosting, push to 404
   redirectTo404IfLikelyNotFound();
-
-  // Apply stored consent (if user already decided previously)
   syncConsentFromStorage();
 
-  // Load header first so nav exists before bindings
   await loadComponent("components/header.html", "header-placeholder");
-
-  initMobileMenu();
-  initSmoothScrolling();
-  initContactForm();
-  setActiveNav();
-
-  // Load footer after
-  await loadComponent("components/footer.html", "footer-placeholder");
-
-  // Show cookie banner if needed
-  ensureCookieBanner();
-});
-
-function initTechDropdownMobile() {
-  const dropdown = document.querySelector(".has-dropdown");
-  const toggle = document.querySelector(".has-dropdown .dropdown-toggle");
-  if (!dropdown || !toggle) return;
-
-  // Mobile only: tap to open/close
-  const isMobile = () => window.matchMedia("(max-width: 900px)").matches;
-
-  toggle.addEventListener("click", (e) => {
-    if (!isMobile()) return; // desktop uses hover
-    e.preventDefault();
-    dropdown.classList.toggle("open");
-    toggle.setAttribute("aria-expanded", dropdown.classList.contains("open") ? "true" : "false");
-  });
-
-  // Close dropdown when resizing to desktop
-  window.addEventListener("resize", () => {
-    if (!isMobile()) {
-      dropdown.classList.remove("open");
-      toggle.setAttribute("aria-expanded", "false");
-    }
-  });
-}
-
-document.addEventListener('DOMContentLoaded', async function () {
-  // Load header first so nav exists
-  await loadComponent('components/header.html', 'header-placeholder');
 
   initMobileMenu();
   initTechDropdownMobile();
@@ -279,8 +237,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   initContactForm();
   setActiveNav();
 
-  // Load footer after
-  await loadComponent('components/footer.html', 'footer-placeholder');
+  await loadComponent("components/footer.html", "footer-placeholder");
+
+  ensureCookieBanner();
 });
-
-
