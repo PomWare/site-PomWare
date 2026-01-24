@@ -2,18 +2,24 @@
 class ProjectsCarousel {
     constructor() {
         this.container = document.getElementById('projectsContainer');
-        this.projects = document.querySelectorAll('.project-card');
         this.indicatorsContainer = document.getElementById('carouselIndicators');
         this.prevBtn = document.getElementById('carouselPrev');
         this.nextBtn = document.getElementById('carouselNext');
-        
+
+        // If any required element is missing, stop (prevents JS crash)
+        if (!this.container || !this.indicatorsContainer || !this.prevBtn || !this.nextBtn) return;
+
+        this.projects = this.container.querySelectorAll('.project-card');
+        if (!this.projects.length) return;
+
         this.currentIndex = 0;
         this.projectsPerView = this.getProjectsPerView();
         this.totalProjects = this.projects.length;
-        
+
         this.init();
         this.setupResponsive();
     }
+
     
     getProjectsPerView() {
         if (window.innerWidth <= 480) return 1;
@@ -122,10 +128,6 @@ class ProjectsCarousel {
     }
 }
 
-// Initialize carousel when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if we're on a page with carousel
-    if (document.getElementById('projectsContainer')) {
-        new ProjectsCarousel();
-    }
+document.addEventListener('DOMContentLoaded', () => {
+  new ProjectsCarousel();
 });
