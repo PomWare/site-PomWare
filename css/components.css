@@ -643,51 +643,131 @@ footer {
 }
 
 /* =========================
-   PROJECTS CAROUSEL
+   PROJECTS CAROUSEL (MATCH SITE STYLE)
 ========================= */
 
 .projects-carousel{
   position: relative;
-  overflow: hidden;            /* hides off-screen cards */
-  padding: 10px 0;
+  overflow: hidden;
+  padding: 10px 0 0;
 }
 
 /* the moving row */
 .projects-container{
   display: flex;
-  flex-wrap: nowrap;           /* IMPORTANT: prevents stacking */
-  gap: 32px;                   /* matches your JS (+32) */
+  flex-wrap: nowrap;
+  gap: 32px;
   transition: transform 0.4s ease;
   will-change: transform;
+  padding: 10px 0; /* small breathing room for hover lift */
 }
 
-/* each card should not shrink */
+/* card sizing */
 .project-card{
   flex: 0 0 auto;
-  width: calc((100% - 64px) / 3);  /* 3 per view (default) */
+  width: calc((100% - 64px) / 3);
+
+  /* MATCH service-card / tech-card look */
+  background: var(--card-bg);
+  border-radius: 15px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  text-align: left; /* you can change to center if you want */
+}
+
+.project-card:hover{
+  transform: translateY(-10px);
+  box-shadow: var(--glow);
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+/* icon box centered like service-icon/tech-icon */
+.project-icon{
+  width: 70px;
+  height: 70px;
+  background: var(--gradient);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 1.8rem;
+}
+
+/* force icon to white (font-awesome inherits sometimes) */
+.project-icon i{
+  color: #fff;
+}
+
+.project-card h3{
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.project-card p{
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* button similar vibe to your buttons */
+.project-button{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.9rem 1.2rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+
+  background: rgba(0, 212, 255, 0.12);
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  color: var(--text);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.project-button:hover{
+  background: rgba(0, 212, 255, 0.18);
+  border-color: rgba(0, 212, 255, 0.35);
+  transform: translateY(-2px);
 }
 
 /* responsive widths to match JS projectsPerView */
 @media (max-width: 1024px){
-  .project-card{ width: calc((100% - 32px) / 2); } /* 2 per view */
+  .project-card{ width: calc((100% - 32px) / 2); }
 }
 @media (max-width: 768px){
-  .project-card{ width: 100%; }                    /* 1 per view */
+  .project-card{ width: 100%; }
 }
 
-/* buttons */
+/* buttons (match your theme) */
 .carousel-btn{
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 5;
+
   width: 44px;
   height: 44px;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(26, 35, 50, 0.85);
+
+  border: 1px solid rgba(0, 212, 255, 0.22);
+  background: rgba(26, 35, 50, 0.92);
+  backdrop-filter: blur(10px);
   color: var(--text);
+
   cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.carousel-btn:hover{
+  transform: translateY(-50%) scale(1.05);
+  border-color: rgba(0, 212, 255, 0.35);
+  background: rgba(26, 35, 50, 0.98);
 }
 
 .carousel-prev{ left: 10px; }
@@ -707,8 +787,10 @@ footer {
   border-radius: 999px;
   background: rgba(255,255,255,0.25);
   cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .indicator.active{
   background: var(--accent);
+  transform: scale(1.2);
 }
