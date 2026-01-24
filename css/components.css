@@ -175,7 +175,6 @@ nav a:hover::after { width: 100%; }
 
 @media (max-width: 900px){
   .mobile-menu-btn{
-    display:inline-flex;
     align-items:center;
     justify-content:center;
     margin-left:auto;
@@ -619,3 +618,14 @@ footer {
   }
 }
 
+.footer-links li a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.footer-links li a:hover {
+  text-decoration: underline;
+}
