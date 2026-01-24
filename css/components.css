@@ -641,3 +641,74 @@ footer {
 .footer-links li a:hover {
   text-decoration: underline;
 }
+
+/* =========================
+   PROJECTS CAROUSEL
+========================= */
+
+.projects-carousel{
+  position: relative;
+  overflow: hidden;            /* hides off-screen cards */
+  padding: 10px 0;
+}
+
+/* the moving row */
+.projects-container{
+  display: flex;
+  flex-wrap: nowrap;           /* IMPORTANT: prevents stacking */
+  gap: 32px;                   /* matches your JS (+32) */
+  transition: transform 0.4s ease;
+  will-change: transform;
+}
+
+/* each card should not shrink */
+.project-card{
+  flex: 0 0 auto;
+  width: calc((100% - 64px) / 3);  /* 3 per view (default) */
+}
+
+/* responsive widths to match JS projectsPerView */
+@media (max-width: 1024px){
+  .project-card{ width: calc((100% - 32px) / 2); } /* 2 per view */
+}
+@media (max-width: 768px){
+  .project-card{ width: 100%; }                    /* 1 per view */
+}
+
+/* buttons */
+.carousel-btn{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(26, 35, 50, 0.85);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.carousel-prev{ left: 10px; }
+.carousel-next{ right: 10px; }
+
+/* indicators */
+.carousel-indicators{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.indicator{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.25);
+  cursor: pointer;
+}
+
+.indicator.active{
+  background: var(--accent);
+}
