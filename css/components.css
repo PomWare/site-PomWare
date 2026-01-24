@@ -174,6 +174,17 @@ nav a:hover::after { width: 100%; }
 .nav-cta-item{ display:none; } /* mobile CTA item hidden on desktop */
 
 @media (max-width: 900px){
+   .has-dropdown > .dropdown-toggle{
+    display: flex;              /* override inline-flex */
+    width: 100%;
+    justify-content: space-between;
+    padding: 14px 5%;           /* match nav a padding */
+  }
+
+  .has-dropdown > .dropdown-toggle .nav-chevron{
+    margin-left: auto;
+  }
+
   .mobile-menu-btn{
     display: flex;  
     align-items:center;
